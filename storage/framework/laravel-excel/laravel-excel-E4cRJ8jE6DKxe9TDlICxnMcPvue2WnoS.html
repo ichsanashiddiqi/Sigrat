@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gratifikasi</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href=" http://localhost:8000/css/app.css ">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="http://localhost:8000/plugins/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="http://localhost:8000/plugins/daterangepicker/daterangepicker.css">
+    
+    <link href="http://localhost:8000/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container,
+        .select2-container>.selection,
+        .select2-container>.selection>.select2-selection {
+            display: block;
+            height: calc(1.6em + 0.75rem + 2px);
+        }
+
+        .select2-selection__rendered {
+            margin-top: -5px !important;
+        }
+
+        .select2-selection__arrow {
+            margin-top: 5px;
+        }
+
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href=" http://localhost:8000/home " class="nav-link">Home</a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-user"> Admin </i>
+                        <p> </p>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div class="dropdown-divider"></div>
+                                                <a href="profile" class="dropdown-item">
+                            <i class="fas fa-user mr-2"></i> Profile
+                        </a>
+                         
+                        <a href="http://localhost:8000/logout" class="dropdown-item" onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                            <i class="fas fa-power-off mr-2"></i> Logout
+                        </a>
+
+                        <form id="logout-form" action="http://localhost:8000/logout" method="POST" class="d-none">
+                            <input type="hidden" name="_token" value="3Tvg19JTeAYzTmLKXjBHxGHCvv43P9m1GiTGFx9U">                        </form>
+                    </div>
+                </li>
+                <li class="nav_item"></li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        
+
+        <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Gratifikasi</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="home">Home</a></li>
+                            <li class="breadcrumb-item active">Gratifikasi</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal fade" id="modal-danger">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-danger">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Delete Data</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Delete Data?&hellip;</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-outline-light"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-outline-light" id="deleteInbox">Delete</button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        <div class="card">
+                            <div class="card-header p-2">
+                                <ul class="nav nav-pills">
+                                    <div class="float-right">
+                                        <a class="btn btn-secondary" href="/export"> Export</a>
+                                    </div>
+                                    <li class="nav-item"><a class="nav-link active" href="#list" data-toggle="tab">List
+                                            Laporan</a></li>
+                                    
+                                    
+                                </ul>
+                            </div><!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="active tab-pane" id="list">
+                                        <table class="table table-bordered table-striped text-center" id="table2">
+                                            <thead>
+                                                <tr>
+                                                    <th>NO</th>
+                                                    <th>JENIS BENTUK GRATIFIKASI</th>
+                                                    <th>NAMA PENERIMA GRATIFIKASI</th>
+                                                    <th>NILAI EQUIVALENT</th>
+                                                    <th>TANGGAL PENERIMAAN PEMBERIAN</th>
+                                                    <th>LOKASI PEMBERIAN</th>
+                                                    <th>PEMBERI GRATIFIKASI</th>
+                                                    <th>HUBUNGAN DENGAN PEMBERI GRATFIKASI</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                                                                
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Apaaja</td>
+                                                        <td>endg, 1841720, istri orang</td>
+                                                        <td>123321123</td>
+                                                        <td>2021-08-12 00:00:00</td>
+                                                        <td>Kidoel</td>
+                                                        <td>Admino, Lor, 021</td>
+                                                        <td>Kepo</td>
+
+
+
+                                                    </tr>
+                                                                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+
+                                    <!-- /.tab-pane -->
+                                </div>
+                                <!-- /.tab-content -->
+                            </div><!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+            
+    </div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src=" http://localhost:8000/js/app.js"></script>
+    <script src=" http://localhost:8000/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src=" http://localhost:8000/plugins/select2/js/select2.min.js"></script>
+    <script src=" http://localhost:8000/plugins/daterangepicker/daterangepicker.js"></script>
+    
+    
+
+            
+        <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js">
+        </script>
+                <script>
+            $(document).ready(function() {
+                $('#table2').DataTable({
+                    "responsive": true,
+                    "lengthChange": true,
+                    "autoWidth": true,
+                    "paging": true,
+                    "searching": true,
+                    "ordering": true,
+                })
+            })
+            document.addEventListener('DOMContentLoaded', function() {
+                $('#deleteModal').on('show.bs.modal', function(event) {
+                    const button = $(event.relatedTarget)
+                    const value = button.data('outbox')
+                    console.log(value);
+                    $(this).find('form').attr('action', `http://localhost:8000/outbox/${value}`)
+                })
+            })
+            $(function() {
+                $('#employees').select2()
+                $('#inbox').select2()
+            })
+        </script>
+    </body>
+
+</html>
+
+<footer class="main-footer">
+    <!-- To the right -->
+    
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
+    reserved.
+</footer><aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href=" http://localhost:8000/home " class="brand-link">
+        <span class="brand-text font-weight-light">SIGRAT</span>
+    </a>
+                             
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                
+                <img src="http://localhost:8000/storage/images/Admin.jpg" class="img-circle elevation-2"
+                    alt="User Image">
+
+                
+                <div class="info">
+                    <a href="profile" class="d-block">Admin</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-envelope"></i>
+                        <p>
+                            Surat Masuk
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="http://localhost:8000/inbox" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Surat Masuk</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-inbox"></i>
+                        <p>
+                            Surat Tugas
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="http://localhost:8000/outbox" class="nav-link">
+                                <i class="far fa-inbox"></i>
+                                <p>List Surat Tugas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://localhost:8000/petugas" class="nav-link">
+                                <i class="far fa-users"></i>
+                                <p>Status Pegawai</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="http://localhost:8000/laporan" class="nav-link">
+                        <i class="nav-icon fa fa-list-alt"></i>
+                        <p>Laporan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="http://localhost:8000/user" class="nav-link">
+                        <i class="nav-icon fa fa-user"></i>
+                        <p>
+                            Kelola User
+                        </p>
+                    </a>
+                </li>
+                
+                   
+                
+            </ul>
+        </nav>
+    <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
